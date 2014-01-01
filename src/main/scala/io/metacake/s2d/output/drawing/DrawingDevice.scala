@@ -20,8 +20,8 @@ object DrawingDevice {
 
 class DrawingDevice extends OutputDevice {
 
-  var frame : JFrame = null
-  var strategy : BufferStrategy = null
+  var frame : JFrame = _
+  var strategy : BufferStrategy = _
   val drawingThread : TimedLoopThread = new TimedLoopThread(new Runnable {
     def run(): Unit = draw(instructions.asInstanceOf[util.Collection[RenderingInstruction[Graphics2D]]])
   })
@@ -59,5 +59,7 @@ class DrawingDevice extends OutputDevice {
       instruction.render(graphics)
       graphics.dispose()
     }
+    parentGraphics.dispose()
+    strategy.show()
   }
 }
