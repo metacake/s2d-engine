@@ -14,7 +14,7 @@ class KeyboardActionTrigger(private val keycode: Int) extends ActionTrigger[KeyE
 
   def bindingDevice(): InputDeviceName = KeyboardDevice.NAME
 
-  def bindRecognizer(recognizer: KeyActionRecognizer): KeyboardActionTrigger with TimeStamped = {
+  def bindRecognizer(recognizer: KeyActionRecognizer): KeyboardActionTrigger = {
     recognizers.add(recognizer)
     this
   }
