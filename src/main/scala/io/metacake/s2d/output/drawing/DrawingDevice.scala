@@ -23,7 +23,7 @@ class DrawingDevice extends OutputDevice {
   var frame : JFrame = _
   var strategy : BufferStrategy = _
   val drawingThread : TimedLoopThread = new TimedLoopThread(new Runnable {
-    def run(): Unit = draw(instructions.asInstanceOf[util.Collection[RenderingInstruction[Graphics2D]]])
+    def run(): Unit = draw(instructions.asInstanceOf[util.Collection[DrawingInstruction]])
   })
   var instructions : util.Collection[RenderingInstruction[_]] = Collections.emptyList()
 
@@ -48,18 +48,18 @@ class DrawingDevice extends OutputDevice {
 
   }
 
-  def draw(instructions : util.Collection[RenderingInstruction[Graphics2D]]): Unit = {
+  def draw(instructions : util.Collection[DrawingInstruction]): Unit = {
     val parentGraphics: Graphics2D = strategy.getDrawGraphics.asInstanceOf[Graphics2D]
     val insets: Insets = frame.getInsets
-    parentGraphics.translate(insets.right, insets.top)
-    parentGraphics.setColor(Color.WHITE)
-    parentGraphics.fillRect(0, 0, frame.getWidth, frame.getHeight)
-    for (instruction: RenderingInstruction[Graphics2D] <- instructions) {
+    parentGraphics translate(insets.right, insets.top)
+    parentGraphics setColor Color.WHITE
+    parentGraphics fillRect(0, 0, frame.getWidth, frame.getHeight)
+    for (instruction: DrawingInstruction <- instructions) {
       val graphics = parentGraphics.create().asInstanceOf[Graphics2D]
-      instruction.render(graphics)
-      graphics.dispose()
+      instruction render graphics
+      graphics dispose()
     }
-    parentGraphics.dispose()
-    strategy.show()
+    parentGraphics dispose()
+    strategy show()
   }
 }
