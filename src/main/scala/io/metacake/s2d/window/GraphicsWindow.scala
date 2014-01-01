@@ -5,7 +5,7 @@ import javax.swing.JFrame
 import java.awt.Insets
 import java.awt.event.{WindowEvent, WindowAdapter}
 
-class GraphicsWindow(width: Int, height: Int) extends CakeWindow[JFrame] {
+class GraphicsWindow(private val width: Int, private val height: Int) extends CakeWindow[JFrame] {
   val frame : JFrame = new JFrame()
   frame setVisible true
   val insets : Insets = frame.getInsets
