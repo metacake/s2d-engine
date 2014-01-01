@@ -1,4 +1,4 @@
-package io.metacake.s2d.output
+package io.metacake.s2d.output.drawing
 
 import java.util
 import io.metacake.core.output.{OutputDeviceName, RenderingInstruction}
@@ -12,10 +12,7 @@ import io.metacake.s2d.window.GraphicsWindow
 import java.awt.{Color, Insets, Graphics2D}
 import scala.collection.JavaConversions._
 
-object DrawingDevice {
-  val NAME : OutputDeviceName = new OutputDeviceName()
-  val BUFFERS : Int = 2
-}
+
 
 class DrawingDevice extends OutputDevice {
 
