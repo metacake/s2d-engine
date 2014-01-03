@@ -13,7 +13,7 @@ class ReleaseActionRecognizer(name: ActionRecognizerName) extends ActionRecogniz
     isTriggered
   }
 
-  def triggerWeight(): Int = 1
+  def triggerWeight(): Int = if (triggered) 1 else 0
 
   def forgetActions(): Unit = this.triggered = false
 }

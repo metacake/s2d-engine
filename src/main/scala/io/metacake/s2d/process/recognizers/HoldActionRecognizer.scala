@@ -9,7 +9,7 @@ class HoldActionRecognizer(name: ActionRecognizerName) extends ActionRecognizer 
 
   def wasTriggered(): Boolean = triggered
 
-  def triggerWeight(): Int = 1
+  def triggerWeight(): Int = if (triggered) 1 else 0
 
   def forgetActions(): Unit = triggered = false
 }
