@@ -7,6 +7,7 @@ class DrawCircleInstruction(x: Int, y: Int, radius: Int, val color: Color) exten
 
   override def render(context: Graphics2D): Unit = {
     super.render(context)
-    context.fillOval(x, y, radius, radius)
+    val diameter: Int = 2 * radius
+    context.fillOval(x - radius, y - radius, diameter, diameter)
   }
 }

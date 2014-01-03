@@ -7,6 +7,6 @@ class DrawRectangleInstruction(x: Int, y: Int, width: Int, height: Int, val colo
 
   override def render(context: Graphics2D): Unit = {
     super.render(context)
-    context.fillRect(x, y, width, height)
+    context.fillRect(x - (width / 2), y - (height / 2), width, height)
   }
 }
