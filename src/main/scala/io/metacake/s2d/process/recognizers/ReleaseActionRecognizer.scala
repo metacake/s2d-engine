@@ -7,13 +7,13 @@ class ReleaseActionRecognizer(name: ActionRecognizerName) extends ActionRecogniz
 
   def getName: ActionRecognizerName = name
 
-  def wasTriggered(): Boolean = {
+  def wasTriggered(): Boolean = triggered
+
+  def triggerWeight(): Int = {
     val isTriggered: Boolean = triggered
     this.triggered = false
-    isTriggered
+    if (isTriggered) 1 else 0
   }
-
-  def triggerWeight(): Int = if (triggered) 1 else 0
 
   def forgetActions(): Unit = this.triggered = false
 }

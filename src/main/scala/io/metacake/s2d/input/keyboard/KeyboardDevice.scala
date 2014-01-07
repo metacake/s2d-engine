@@ -18,15 +18,17 @@ class KeyboardDevice extends InputDevice with KeyListener {
   var triggers : util.Collection[KeyboardActionTrigger] = new util.ArrayList[KeyboardActionTrigger]()
   val timer : MilliTimer = new MilliTimer()
 
-  def keyPressed(event: KeyEvent): Unit = keyHandler((trigger: KeyboardActionTrigger) => trigger.pressed())
+  def keyPressed(event: KeyEvent): Unit = keyHandler(event, (trigger: KeyboardActionTrigger) => trigger.pressed())
 
-  def keyReleased(event: KeyEvent): Unit = keyHandler((trigger: KeyboardActionTrigger) => trigger.released())
+  def keyReleased(event: KeyEvent): Unit = keyHandler(event, (trigger: KeyboardActionTrigger) => trigger.released())
 
-  private def keyHandler(func: KeyboardActionTrigger => Unit): Unit = {
+  private def keyHandler(event: KeyEvent, func: KeyboardActionTrigger => Unit): Unit = {
     val time : Long = timer.poll()
     for(trigger: KeyboardActionTrigger <- triggers) {
-      trigger setTimeStamp time
-      func apply trigger
+      if (trigger.isTriggeredBy(event)) {
+        trigger setTimeStamp time
+        func apply trigger
+      }
     }
   }
 
