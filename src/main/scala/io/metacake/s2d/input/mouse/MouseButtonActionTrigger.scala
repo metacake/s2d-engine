@@ -7,12 +7,11 @@ import java.util
 import io.metacake.s2d.process.recognizers.mouse.MouseButtonActionRecognizer
 import scala.collection.JavaConversions._
 
-class MouseButtonActionTrigger(private val buttonCode: Int) extends ActionTrigger[MouseEvent] with TimeStamped {
+class MouseButtonActionTrigger(private val buttonCode: Either[Int,MouseMotionType]) extends ActionTrigger[MouseEvent] with TimeStamped {
 
   val recognizers: util.Collection[MouseButtonActionRecognizer] = new util.ArrayList[MouseButtonActionRecognizer]()
 
-  def isTriggeredBy(event: MouseEvent): Boolean = event.getButton == buttonCode
-
+  def isTriggeredBy(eventType: Either[Int,MouseMotionType]): Boolean = event.getButton == buttonCode
   def bindingDevice(): InputDeviceName = MouseDevice.NAME
 
   def bindRecognizer(recognizer: MouseButtonActionRecognizer): MouseButtonActionTrigger = {

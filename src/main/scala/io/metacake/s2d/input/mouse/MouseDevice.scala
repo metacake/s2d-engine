@@ -2,7 +2,7 @@ package io.metacake.s2d.input.mouse
 
 import io.metacake.core.input.{ActionTrigger, InputDeviceName}
 import io.metacake.core.input.system.InputDevice
-import java.awt.event.{MouseEvent, MouseListener}
+import java.awt.event.{MouseMotionListener, MouseEvent, MouseListener}
 import io.metacake.core.common.window.CakeWindow
 import java.util
 import io.metacake.core.common.MilliTimer
@@ -13,11 +13,27 @@ object MouseDevice {
   val NAME: InputDeviceName = new InputDeviceName("S2D Mouse")
 }
 
-class MouseDevice extends InputDevice with MouseListener {
+class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
+
 
   var triggers: util.Collection[MouseButtonActionTrigger] = new util.ArrayList[MouseButtonActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
+  //MouseMotionListener
+  def mouseMoved(e: MouseEvent): Unit = {
 
+  }
+
+  def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
+
+  private def handMouseMoved(t: MouseMotionType, amount: Int) {
+    for(trigger: MouseButtonActionTrigger <- triggers) {
+      if(trigger.isTriggeredBy(t)) {
+
+      }
+    }
+  }
+
+  // MouseListener
   def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.pressed(e.getX, e.getY))
 
   def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.released(e.getX, e.getY))
@@ -25,13 +41,14 @@ class MouseDevice extends InputDevice with MouseListener {
   private def mouseButtonHandler(event: MouseEvent, func: MouseButtonActionTrigger => Unit): Unit = {
     val time : Long = timer.poll()
     for(trigger: MouseButtonActionTrigger <- triggers) {
-      if (trigger.isTriggeredBy(event)) {
+      if (trigger.isTriggeredBy(event.getButton)) {
         trigger.setTimeStamp(time)
         func.apply(trigger)
       }
     }
   }
 
+  // InputDevice
   def name(): InputDeviceName = MouseDevice.NAME
 
   def bind(window: CakeWindow[_]): Unit = window.asInstanceOf[CakeWindow[JFrame]].getRawWindow.addMouseListener(this)
@@ -45,13 +62,15 @@ class MouseDevice extends InputDevice with MouseListener {
 
   def releaseTriggers(): Unit = triggers = new util.ArrayList[MouseButtonActionTrigger]()
 
+  def startInputLoop(): Unit = ()
+
+  def shutdown(): Unit = ()
+
+
+  // junk
   def mouseClicked(e: MouseEvent): Unit = e.consume()
 
   def mouseEntered(e: MouseEvent): Unit = e.consume()
 
   def mouseExited(e: MouseEvent): Unit = e.consume()
-
-  def startInputLoop(): Unit = ()
-
-  def shutdown(): Unit = ()
 }
