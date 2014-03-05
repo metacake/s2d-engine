@@ -18,32 +18,39 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
 
   var triggers: util.Collection[MouseButtonActionTrigger] = new util.ArrayList[MouseButtonActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
+  var x = 0
+  var y = 0
   //MouseMotionListener
   def mouseMoved(e: MouseEvent): Unit = {
-
+    val xMoved = e.getX - x
+    val yMoved = e.getY - y
+    this.x = e.getX
+    this.y = e.getY
+    if(xMoved != 0) handleMouseMoved(MouseMotionType.X,xMoved)
+    if(yMoved != 0) handleMouseMoved(MouseMotionType.Y,yMoved)
   }
 
   def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
 
-  private def handMouseMoved(t: MouseMotionType, amount: Int) {
+  private def handleMouseMoved(t: MouseMotionType, amount: Long) {
     for(trigger: MouseButtonActionTrigger <- triggers) {
-      if(trigger.isTriggeredBy(t)) {
-
+      if(trigger.isTriggeredBy(Right(t))) {
+        //TODO: pressed is a little funny here, but it works for now
+        trigger.pressed(x,y,amount)
       }
     }
   }
 
   // MouseListener
-  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.pressed(e.getX, e.getY))
+  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger,w: Long) => t.pressed(e.getX, e.getY, w))
 
-  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.released(e.getX, e.getY))
+  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger,w: Long) => t.released(e.getX, e.getY, w))
 
-  private def mouseButtonHandler(event: MouseEvent, func: MouseButtonActionTrigger => Unit): Unit = {
+  private def mouseButtonHandler(event: MouseEvent, func: (MouseButtonActionTrigger, Long) => Unit): Unit = {
     val time : Long = timer.poll()
     for(trigger: MouseButtonActionTrigger <- triggers) {
-      if (trigger.isTriggeredBy(event.getButton)) {
-        trigger.setTimeStamp(time)
-        func.apply(trigger)
+      if (trigger.isTriggeredBy(Left(event.getButton))) {
+        func.apply(trigger,time)
       }
     }
   }

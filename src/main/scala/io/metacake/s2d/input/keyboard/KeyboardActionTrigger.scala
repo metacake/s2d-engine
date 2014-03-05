@@ -7,7 +7,7 @@ import io.metacake.s2d.input.TimeStamped
 import scala.collection.JavaConversions._
 import io.metacake.s2d.process.recognizers.keyboard.KeyActionRecognizer
 
-class KeyboardActionTrigger(private val keycode: Int) extends ActionTrigger[KeyEvent] with TimeStamped {
+class KeyboardActionTrigger(private val keycode: Int) extends ActionTrigger[KeyEvent] {
   val recognizers: util.Collection[KeyActionRecognizer] = new util.ArrayList[KeyActionRecognizer]()
 
   def isTriggeredBy(event: KeyEvent): Boolean = event.getKeyCode == keycode
@@ -19,7 +19,7 @@ class KeyboardActionTrigger(private val keycode: Int) extends ActionTrigger[KeyE
     this
   }
 
-  def pressed(): Unit = for(recognizer: KeyActionRecognizer <- recognizers) recognizer.press(this.getTimeStamp)
+  def pressed(time: Long): Unit = for(recognizer: KeyActionRecognizer <- recognizers) recognizer.press(time)
 
-  def released(): Unit = for(recognizer: KeyActionRecognizer <- recognizers) recognizer.release(this.getTimeStamp)
+  def released(time: Long): Unit = for(recognizer: KeyActionRecognizer <- recognizers) recognizer.release(time)
 }
