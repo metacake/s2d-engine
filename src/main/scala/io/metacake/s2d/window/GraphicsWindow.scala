@@ -7,12 +7,12 @@ import java.awt.event.{WindowEvent, WindowAdapter}
 
 class GraphicsWindow(private val width: Int, private val height: Int) extends CakeWindow[JFrame] {
   val frame : JFrame = new JFrame()
-  frame setVisible true
+  frame.setVisible(true)
   val insets : Insets = frame.getInsets
-  frame setSize(width + insets.left + insets.right, height + insets.top + insets.bottom)
-  frame addWindowListener new WindowAdapter {
+  frame.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom)
+  frame.addWindowListener(new WindowAdapter {
     override def windowClosing(event: WindowEvent): Unit = close()
-  }
+  })
 
   def dispose(): Unit = frame.dispose()
 

@@ -23,14 +23,14 @@ class DrawingDevice extends OutputDevice {
   var frame : JFrame = _
   var strategy : BufferStrategy = _
   val drawingThread : TimedLoopThread = new TimedLoopThread(new Runnable {
-    def run(): Unit = draw(instructions.asInstanceOf[util.Collection[DrawInstruction]])
+    def run(): Unit = draw(instructions)
   })
-  var instructions : util.Collection[RenderingInstruction[_]] = Collections.emptyList()
+  var instructions : util.Collection[DrawInstruction] = Collections.emptyList()
 
   def name(): OutputDeviceName = DrawingDevice.NAME
 
   def render(instructions: util.Collection[RenderingInstruction[_]]): Unit = {
-    this.instructions = instructions
+    this.instructions = instructions.asInstanceOf[util.Collection[DrawInstruction]]
   }
 
   def startOutputLoop(): Unit = drawingThread.start()

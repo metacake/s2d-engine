@@ -18,16 +18,16 @@ class MouseDevice extends InputDevice with MouseListener {
   var triggers: util.Collection[MouseButtonActionTrigger] = new util.ArrayList[MouseButtonActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
 
-  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (trigger: MouseButtonActionTrigger) => trigger.pressed(e.getX, e.getY))
+  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.pressed(e.getX, e.getY))
 
-  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (trigger: MouseButtonActionTrigger) => trigger.released(e.getX, e.getY))
+  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger) => t.released(e.getX, e.getY))
 
   private def mouseButtonHandler(event: MouseEvent, func: MouseButtonActionTrigger => Unit): Unit = {
     val time : Long = timer.poll()
     for(trigger: MouseButtonActionTrigger <- triggers) {
       if (trigger.isTriggeredBy(event)) {
-        trigger setTimeStamp time
-        func apply trigger
+        trigger.setTimeStamp(time)
+        func.apply(trigger)
       }
     }
   }
