@@ -1,8 +1,6 @@
 package io.metacake.s2d.input.mouse
 
 import io.metacake.core.input.{InputDeviceName, ActionTrigger}
-import java.awt.event.MouseEvent
-import io.metacake.s2d.input.TimeStamped
 import java.util
 import io.metacake.s2d.process.recognizers.mouse.MouseButtonActionRecognizer
 import scala.collection.JavaConversions._

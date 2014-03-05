@@ -3,7 +3,6 @@ package io.metacake.s2d.input.keyboard
 import java.util
 import io.metacake.core.input.{InputDeviceName, ActionTrigger}
 import java.awt.event.KeyEvent
-import io.metacake.s2d.input.TimeStamped
 import scala.collection.JavaConversions._
 import io.metacake.s2d.process.recognizers.keyboard.KeyActionRecognizer
 
