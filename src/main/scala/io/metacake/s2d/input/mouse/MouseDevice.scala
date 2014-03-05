@@ -10,7 +10,7 @@ import javax.swing.JFrame
 import scala.collection.JavaConversions._
 
 object MouseDevice {
-  val NAME: InputDeviceName = new InputDeviceName()
+  val NAME: InputDeviceName = new InputDeviceName("S2D Mouse")
 }
 
 class MouseDevice extends InputDevice with MouseListener {

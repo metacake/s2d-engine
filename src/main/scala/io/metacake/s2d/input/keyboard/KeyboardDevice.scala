@@ -10,7 +10,7 @@ import javax.swing.JFrame
 import scala.collection.JavaConversions._
 
 object KeyboardDevice {
-  val NAME: InputDeviceName = new InputDeviceName()
+  val NAME: InputDeviceName = new InputDeviceName("S2D Keyboard")
 }
 
 class KeyboardDevice extends InputDevice with KeyListener {

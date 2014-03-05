@@ -14,7 +14,7 @@ import java.awt.{Color, Insets, Graphics2D}
 import scala.collection.JavaConversions._
 
 object DrawingDevice {
-  val NAME : OutputDeviceName = new OutputDeviceName()
+  val NAME : OutputDeviceName = new OutputDeviceName("S2D Drawing Device")
   val BUFFERS : Int = 2
 }
 
