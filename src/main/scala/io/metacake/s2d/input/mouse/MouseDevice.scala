@@ -16,7 +16,7 @@ object MouseDevice {
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
 
 
-  var triggers: util.Collection[MouseButtonActionTrigger] = new util.ArrayList[MouseButtonActionTrigger]()
+  var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
   var x = 0
   var y = 0
@@ -33,7 +33,7 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
   def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
 
   private def handleMouseMoved(t: MouseMotionType, amount: Long) {
-    for(trigger: MouseButtonActionTrigger <- triggers) {
+    for(trigger: MouseActionTrigger <- triggers) {
       if(trigger.isTriggeredBy(Right(t))) {
         //TODO: pressed is a little funny here, but it works for now
         trigger.pressed(x,y,amount)
@@ -42,13 +42,13 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
   }
 
   // MouseListener
-  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger,w: Long) => t.pressed(e.getX, e.getY, w))
+  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.pressed(e.getX, e.getY, w))
 
-  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseButtonActionTrigger,w: Long) => t.released(e.getX, e.getY, w))
+  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.released(e.getX, e.getY, w))
 
-  private def mouseButtonHandler(event: MouseEvent, func: (MouseButtonActionTrigger, Long) => Unit): Unit = {
+  private def mouseButtonHandler(event: MouseEvent, func: (MouseActionTrigger, Long) => Unit): Unit = {
     val time : Long = timer.poll()
-    for(trigger: MouseButtonActionTrigger <- triggers) {
+    for(trigger: MouseActionTrigger <- triggers) {
       if (trigger.isTriggeredBy(Left(event.getButton))) {
         func.apply(trigger,time)
       }
@@ -62,12 +62,12 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
 
   def addTrigger(trigger: ActionTrigger[_]): Unit = {
     trigger match {
-      case t: MouseButtonActionTrigger => triggers.add(t)
+      case t: MouseActionTrigger => triggers.add(t)
       case _ => throw new ClassCastException
     }
   }
 
-  def releaseTriggers(): Unit = triggers = new util.ArrayList[MouseButtonActionTrigger]()
+  def releaseTriggers(): Unit = triggers = new util.ArrayList[MouseActionTrigger]()
 
   def startInputLoop(): Unit = ()
 
