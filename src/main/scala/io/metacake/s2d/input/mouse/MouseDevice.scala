@@ -15,7 +15,6 @@ object MouseDevice {
 
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
 
-
   var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
   var x = 0
@@ -26,8 +25,8 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
     val yMoved = e.getY - y
     this.x = e.getX
     this.y = e.getY
-    if(xMoved != 0) handleMouseMoved(MouseMotionType.X,xMoved)
-    if(yMoved != 0) handleMouseMoved(MouseMotionType.Y,yMoved)
+    if(xMoved != 0) handleMouseMoved(MouseMotionType.X, xMoved)
+    if(yMoved != 0) handleMouseMoved(MouseMotionType.Y, yMoved)
   }
 
   def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
@@ -58,7 +57,11 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
   // InputDevice
   def name(): InputDeviceName = MouseDevice.NAME
 
-  def bind(window: CakeWindow[_]): Unit = window.asInstanceOf[CakeWindow[JFrame]].getRawWindow.addMouseListener(this)
+  def bind(window: CakeWindow[_]): Unit = {
+    val frame: JFrame = window.asInstanceOf[CakeWindow[JFrame]].getRawWindow
+    frame.addMouseListener(this)
+    frame.addMouseMotionListener(this)
+  }
 
   def addTrigger(trigger: ActionTrigger[_]): Unit = {
     trigger match {
