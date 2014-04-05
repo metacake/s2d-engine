@@ -15,44 +15,9 @@ object MouseDevice {
 
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
 
-  var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
-  var x = 0
-  var y = 0
-  //MouseMotionListener
-  def mouseMoved(e: MouseEvent): Unit = {
-    val xMoved = e.getX - x
-    val yMoved = e.getY - y
-    this.x = e.getX
-    this.y = e.getY
-    if(xMoved != 0) handleMouseMoved(MouseMotionType.X, xMoved)
-    if(yMoved != 0) handleMouseMoved(MouseMotionType.Y, yMoved)
-  }
-
-  def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
-
-  private def handleMouseMoved(t: MouseMotionType, amount: Long) {
-    for(trigger: MouseActionTrigger <- triggers) {
-      if(trigger.isTriggeredBy(Right(t))) {
-        //TODO: pressed is a little funny here, but it works for now
-        trigger.pressed(x,y,amount)
-      }
-    }
-  }
-
-  // MouseListener
-  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.pressed(e.getX, e.getY, w))
-
-  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.released(e.getX, e.getY, w))
-
-  private def mouseButtonHandler(event: MouseEvent, func: (MouseActionTrigger, Long) => Unit): Unit = {
-    val time : Long = timer.poll()
-    for(trigger: MouseActionTrigger <- triggers) {
-      if (trigger.isTriggeredBy(Left(event.getButton))) {
-        func.apply(trigger,time)
-      }
-    }
-  }
+  var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
+  var (x: Int, y: Int) = (0, 0)
 
   // InputDevice
   def name(): InputDeviceName = MouseDevice.NAME
@@ -76,8 +41,41 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
 
   def shutdown(): Unit = ()
 
+  //MouseMotionListener
+  def mouseMoved(e: MouseEvent): Unit = {
+    val (dx, dy) = (e.getX - x, e.getY - y)
+    x = e.getX
+    y = e.getY
+    if(dx != 0) handleMouseMoved(MouseMotionType.X, dx)
+    if(dy != 0) handleMouseMoved(MouseMotionType.Y, dy)
+  }
 
-  // junk
+  def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
+
+  private def handleMouseMoved(t: MouseMotionType, amount: Long) {
+    for(trigger: MouseActionTrigger <- triggers) {
+      if(trigger.isTriggeredBy(Right(t))) {
+        //TODO: pressed is a little funny here, but it works for now
+        trigger.pressed(x, y, amount)
+      }
+    }
+  }
+
+  // MouseListener
+  def mousePressed(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.pressed(e.getX, e.getY, w))
+
+  def mouseReleased(e: MouseEvent): Unit = mouseButtonHandler(e, (t: MouseActionTrigger,w: Long) => t.released(e.getX, e.getY, w))
+
+  private def mouseButtonHandler(event: MouseEvent, func: (MouseActionTrigger, Long) => Unit): Unit = {
+    val time : Long = timer.poll()
+    for(trigger: MouseActionTrigger <- triggers) {
+      if (trigger.isTriggeredBy(Left(event.getButton))) {
+        func.apply(trigger,time)
+      }
+    }
+  }
+
+ // junk
   def mouseClicked(e: MouseEvent): Unit = e.consume()
 
   def mouseEntered(e: MouseEvent): Unit = e.consume()
