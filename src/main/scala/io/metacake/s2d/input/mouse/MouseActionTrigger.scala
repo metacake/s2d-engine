@@ -5,6 +5,9 @@ import java.util
 import io.metacake.s2d.process.recognizers.mouse.MouseActionRecognizer
 import scala.collection.JavaConversions._
 
+case class CodedMouseActionTrigger(private val buttonCode: Int) extends MouseActionTrigger(Left(buttonCode))
+case class MotionMouseActionTrigger(private val motionCode: MouseMotionType) extends MouseActionTrigger(Right(motionCode))
+
 class MouseActionTrigger(private val buttonCode: Either[Int,MouseMotionType]) extends ActionTrigger[Either[Int,MouseMotionType]] {
 
   val recognizers: util.Collection[MouseActionRecognizer] = new util.ArrayList[MouseActionRecognizer]()

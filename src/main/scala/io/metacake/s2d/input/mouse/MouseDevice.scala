@@ -15,19 +15,39 @@ object MouseDevice {
 
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
 
-
-  var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
   val timer: MilliTimer = new MilliTimer()
-  var x = 0
-  var y = 0
+  var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
+  var (x: Int, y: Int) = (0, 0)
+
+  // InputDevice
+  def name(): InputDeviceName = MouseDevice.NAME
+
+  def bind(window: CakeWindow[_]): Unit = {
+    val frame: JFrame = window.asInstanceOf[CakeWindow[JFrame]].getRawWindow
+    frame.addMouseListener(this)
+    frame.addMouseMotionListener(this)
+  }
+
+  def addTrigger(trigger: ActionTrigger[_]): Unit = {
+    trigger match {
+      case t: MouseActionTrigger => triggers.add(t)
+      case _ => throw new ClassCastException
+    }
+  }
+
+  def releaseTriggers(): Unit = triggers = new util.ArrayList[MouseActionTrigger]()
+
+  def startInputLoop(): Unit = ()
+
+  def shutdown(): Unit = ()
+
   //MouseMotionListener
   def mouseMoved(e: MouseEvent): Unit = {
-    val xMoved = e.getX - x
-    val yMoved = e.getY - y
-    this.x = e.getX
-    this.y = e.getY
-    if(xMoved != 0) handleMouseMoved(MouseMotionType.X,xMoved)
-    if(yMoved != 0) handleMouseMoved(MouseMotionType.Y,yMoved)
+    val (dx, dy) = (e.getX - x, e.getY - y)
+    x = e.getX
+    y = e.getY
+    if(dx != 0) handleMouseMoved(MouseMotionType.X, dx)
+    if(dy != 0) handleMouseMoved(MouseMotionType.Y, dy)
   }
 
   def mouseDragged(e: MouseEvent): Unit = this.mouseMoved(e)
@@ -36,7 +56,7 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
     for(trigger: MouseActionTrigger <- triggers) {
       if(trigger.isTriggeredBy(Right(t))) {
         //TODO: pressed is a little funny here, but it works for now
-        trigger.pressed(x,y,amount)
+        trigger.pressed(x, y, amount)
       }
     }
   }
@@ -55,26 +75,7 @@ class MouseDevice extends InputDevice with MouseMotionListener with MouseListene
     }
   }
 
-  // InputDevice
-  def name(): InputDeviceName = MouseDevice.NAME
-
-  def bind(window: CakeWindow[_]): Unit = window.asInstanceOf[CakeWindow[JFrame]].getRawWindow.addMouseListener(this)
-
-  def addTrigger(trigger: ActionTrigger[_]): Unit = {
-    trigger match {
-      case t: MouseActionTrigger => triggers.add(t)
-      case _ => throw new ClassCastException
-    }
-  }
-
-  def releaseTriggers(): Unit = triggers = new util.ArrayList[MouseActionTrigger]()
-
-  def startInputLoop(): Unit = ()
-
-  def shutdown(): Unit = ()
-
-
-  // junk
+ // junk
   def mouseClicked(e: MouseEvent): Unit = e.consume()
 
   def mouseEntered(e: MouseEvent): Unit = e.consume()
