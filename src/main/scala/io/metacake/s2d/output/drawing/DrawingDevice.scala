@@ -51,15 +51,15 @@ class DrawingDevice extends OutputDevice {
   def draw(instructions : util.Collection[DrawInstruction]): Unit = {
     val parentGraphics: Graphics2D = strategy.getDrawGraphics.asInstanceOf[Graphics2D]
     val insets: Insets = frame.getInsets
-    parentGraphics translate(insets.right, insets.top)
-    parentGraphics setColor Color.WHITE
-    parentGraphics fillRect(0, 0, frame.getWidth, frame.getHeight)
+    parentGraphics.translate(insets.right, insets.top)
+    parentGraphics.setColor(Color.WHITE)
+    parentGraphics.fillRect(0, 0, frame.getWidth, frame.getHeight)
     for (instruction: DrawInstruction <- instructions) {
       val graphics = parentGraphics.create().asInstanceOf[Graphics2D]
-      instruction render graphics
-      graphics dispose()
+      instruction.render(graphics)
+      graphics.dispose()
     }
-    parentGraphics dispose()
-    strategy show()
+    parentGraphics.dispose()
+    strategy.show()
   }
 }
