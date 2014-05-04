@@ -1,16 +1,19 @@
 package io.metacake.s2d.input.keyboard
 
-import io.metacake.core.input.system.InputDevice
-import java.awt.event.{KeyEvent, KeyListener}
-import io.metacake.core.input.{InputDeviceName, ActionTrigger}
-import io.metacake.core.common.window.CakeWindow
-import java.util
 import io.metacake.core.common.MilliTimer
+import io.metacake.core.common.window.CakeWindow
+import io.metacake.core.input.system.InputDevice
+import io.metacake.core.input.{InputDeviceName, ActionTrigger}
+import io.metacake.core.process.RecognizerBucketName
+import io.metacake.s2d.process.recognizers.keyboard.KeyActionRecognizer
+import java.awt.event.{KeyEvent, KeyListener}
+import java.util
 import javax.swing.JFrame
 import scala.collection.JavaConversions._
 
 object KeyboardDevice {
   val NAME: InputDeviceName = new InputDeviceName("S2D Keyboard")
+  val KEY: RecognizerBucketName[KeyActionRecognizer] = new RecognizerBucketName[KeyActionRecognizer]()
 }
 
 class KeyboardDevice extends InputDevice with KeyListener {

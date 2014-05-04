@@ -1,16 +1,19 @@
 package io.metacake.s2d.input.mouse
 
-import io.metacake.core.input.{ActionTrigger, InputDeviceName}
-import io.metacake.core.input.system.InputDevice
-import java.awt.event.{MouseMotionListener, MouseEvent, MouseListener}
-import io.metacake.core.common.window.CakeWindow
-import java.util
 import io.metacake.core.common.MilliTimer
+import io.metacake.core.common.window.CakeWindow
+import io.metacake.core.input.system.InputDevice
+import io.metacake.core.input.{ActionTrigger, InputDeviceName}
+import io.metacake.core.process.RecognizerBucketName
+import io.metacake.s2d.process.recognizers.mouse.MouseActionRecognizer
+import java.awt.event.{MouseMotionListener, MouseEvent, MouseListener}
+import java.util
 import javax.swing.JFrame
 import scala.collection.JavaConversions._
 
 object MouseDevice {
   val NAME: InputDeviceName = new InputDeviceName("S2D Mouse")
+  val KEY: RecognizerBucketName[MouseActionRecognizer] = new RecognizerBucketName[MouseActionRecognizer]()
 }
 
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
