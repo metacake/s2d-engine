@@ -5,12 +5,11 @@ import io.metacake.core.process.ActionRecognizerName
 
 class MouseSingleActionRecognizer(name: ActionRecognizerName) extends HoldActionRecognizer(name) with MouseActionRecognizer {
   var weight: Long = _
-  def press(weight: Long, x: Int, y: Int): Unit = {
+  override def press(weight: Long, x: Int, y: Int): Unit = {
+    super.press(weight, x, y)
     triggered = true
     this.weight = weight
   }
-
-  def release(weight: Long, x: Int, y: Int): Unit = ()
 
   override def wasTriggered(): Boolean = {
     val actuallyTriggered = triggered
