@@ -12,4 +12,6 @@ abstract class HoldActionRecognizer(name: ActionRecognizerName) extends ActionRe
   def triggerWeight(): Int = if (triggered) 1 else 0
 
   def forgetActions(): Unit = triggered = false
+
+  override def toString: String = "[Hold Action: triggered - " + triggered + "]"
 }

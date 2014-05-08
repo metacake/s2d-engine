@@ -16,4 +16,6 @@ abstract class ReleaseActionRecognizer(name: ActionRecognizerName) extends Actio
   }
 
   def forgetActions(): Unit = this.triggered = false
+
+  override def toString: String = "[Release Action: triggered - " + triggered + "]"
 }
