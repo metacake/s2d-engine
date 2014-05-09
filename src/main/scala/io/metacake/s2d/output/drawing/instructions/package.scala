@@ -12,7 +12,7 @@ package object instructions {
       base.render(context)
       context.translate(x, y)
       image.render(context)
-      context.translate(0, 0)
+      context.translate(-x, -y)
     }
   }
 
