@@ -19,6 +19,13 @@ abstract class ColoredDrawInstruction(color: Color) extends DrawInstruction {
   override def render(context: Graphics2D) = context.setColor(color)
 }
 
+class TextInstruction(text: String, x: Int, y: Int, color: Color) extends ColoredDrawInstruction(color) {
+  override def render(context: Graphics2D): Unit = {
+    super.render(context)
+    context.drawString(text, x, y)
+  }
+}
+
 class FilledShapeInstruction(val shape: Shape, color: Color) extends ColoredDrawInstruction(color) {
   override def render(context: Graphics2D): Unit = {
     super.render(context)
