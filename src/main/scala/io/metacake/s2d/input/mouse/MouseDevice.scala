@@ -18,7 +18,7 @@ object MouseDevice {
 
 class MouseDevice extends InputDevice with MouseMotionListener with MouseListener {
 
-  val timer: MilliTimer = new MilliTimer()
+  val timer: MilliTimer = new MilliTimer(0)
   var triggers: util.Collection[MouseActionTrigger] = new util.ArrayList[MouseActionTrigger]()
   var (x: Int, y: Int) = (0, 0)
 

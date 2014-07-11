@@ -19,7 +19,7 @@ object KeyboardDevice {
 class KeyboardDevice extends InputDevice with KeyListener {
 
   var triggers : util.Collection[KeyboardActionTrigger] = new util.ArrayList[KeyboardActionTrigger]()
-  val timer : MilliTimer = new MilliTimer()
+  val timer : MilliTimer = new MilliTimer(0)
 
   def keyPressed(event: KeyEvent): Unit = keyHandler(event, (tr: KeyboardActionTrigger, time:Long) => tr.pressed(time))
 
